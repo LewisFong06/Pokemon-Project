@@ -7,7 +7,11 @@ for i in range (1, 1026):
     data = response.json()
 
     types = [t["type"]["name"] for t in data["types"]]
-    pokemon.append({"id": data["id"], "name": data["name"], "types": ", ".join(types)})
-    print(f"Fetched data for Pokémon ID {data['id']}: {data['name']}")
+    entry = {"id": data["id"], "name": data["name"], "types": ", ".join(types)}
+
+    for s in data["stats"]:
+        entry[s["stat"]["name"]] = s["base_stat"]
+    
+    pokemon.append(entry)
 
 pd.DataFrame(pokemon).to_csv("pokemon.csv", index=False)
